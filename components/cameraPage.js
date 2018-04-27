@@ -3,12 +3,12 @@ import { route } from 'preact-router';
 import { connect } from 'redux-zero/preact';
 import {mapToProps, actions} from './store';
 import Webcam from 'react-webcam';
-import MediaDevices from './mediadevices';
 import Button from 'preact-material-components/Button';
 import 'preact-material-components/Button/style.css';
 import 'preact-material-components/Theme/style.css';
+import MediaDevices from './mediadevices';
 
-class Home extends Component {
+class CameraPage extends Component {
   constructor(props) {
     super(props);
     this.state = { deviceId: '' }
@@ -17,7 +17,7 @@ class Home extends Component {
   capture = () => { 
     const image = this.webcam.getScreenshot(); 
     this.props.getResults(image);
-    route("/results");
+    route("/list");
   }
 
   handleDeviceChange = (event) => { 
@@ -36,4 +36,4 @@ class Home extends Component {
   }
 }
 
-export default connect(mapToProps, actions)(Home);
+export default connect(mapToProps, actions)(CameraPage);
