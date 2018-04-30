@@ -1,9 +1,9 @@
 import createStore from 'redux-zero';
 import axios from 'axios';
 
-const store = createStore({ results: [] });
+const store = createStore({ results: [], deviceId: '' });
 
-const mapToProps = ({ results }) => ({ results });
+const mapToProps = ({ results, deviceId }) => ({ results, deviceId });
 
 const actions = ({ setState }) => ({
     getResults(state, value) {
@@ -17,16 +17,26 @@ const actions = ({ setState }) => ({
             }
         )
         .then(response => {
+            var product = {
+                name: response.data.responses[0].logoAnnotations[0].description,
+                description: '',
+                price: ''
+            };
             var results = state.results.concat([{
                 image: value,
-                logo: response.data.responses[0].logoAnnotations
-            }])
-            return { results: results }
+                product: product
+            }]);
+            return { results: results, deviceId: state.deviceId }
         })
         .catch(error => {
-            return { results: state.results }
+            var results = state.results.concat([{
+                image: value,
+                product: { name: 'unidentified', description: '', price: '' }
+            }]);
+            return { results: results, deviceId: state.deviceId }
         })
-    }
+    },
+    setDeviceId(state, value) { return { results: state.results, deviceId: value } }    
 });
 
 export { store, mapToProps, actions };
